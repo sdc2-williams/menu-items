@@ -2,12 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
-const seed = require('./models/seed.js');
-
 const app = express();
 const PORT = 3000;
 
-mongoose.connect('mongodb://localhost/menu').then(()=>console.log('db connected'));
+mongoose.connect('mongodb://localhost/menu', { useNewUrlParser: true }).then(()=>console.log('db connected'));
 
 const MenuItem = require('./models/MenuItem.js');
 
