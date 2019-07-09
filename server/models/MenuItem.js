@@ -13,14 +13,11 @@ const MenuItem = mongoose.model('MenuItem', MenuItemSchema)
 
 /* Query */
 const getMenu = () => {
-  return MenuItem.find({}, function(err, docs){
-    if (!err) {
-      console.log(docs);
-      process.exit()
-    } else {
-      console.log('find' + err)
-    }
+  return MenuItem.find({})
+  .then(data => {
+    return(data)
   })
+  .catch(err=>console.log('Query Error:' + err))
 }
 module.exports.MenuItem = MenuItem;
 module.exports.getMenu = getMenu;

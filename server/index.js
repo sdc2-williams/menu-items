@@ -16,7 +16,7 @@ app.get('/', function(req, res){
   res.send()
 })
 app.get('/api/menu', (req,res) => {
-
+  MenuItem.getMenu().then((data)=>res.send(data))
 })
 
 app.listen(PORT, ()=>{
