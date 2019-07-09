@@ -9,21 +9,14 @@ mongoose.connect('mongodb://localhost/menu', { useNewUrlParser: true }).then(()=
 
 const MenuItem = require('./models/MenuItem.js');
 
-seed(MenuItem, {
-  name: 'Burger',
-  description: 'Cheesy',
-  price: '$4.00',
-  options: {
-    cheese: 'extra',
-    drink: 'coke',
-    fries: 'large'
-  }
-})
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('/', function(req, res){
   res.send()
+})
+app.get('/api/menu', (req,res) => {
+
 })
 
 app.listen(PORT, ()=>{
