@@ -35,7 +35,11 @@
     "@babel/preset-env": "^7.5.2",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2",
     "nodemon": "^1.19.1",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"

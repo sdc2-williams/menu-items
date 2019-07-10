@@ -47,7 +47,7 @@ function getRandomMenuItem(){
 
 /* Random Price */
 function getRandomPrice(){
-  let result = '$'+ getRandomInt(15) + '.'+ getRandomInt(99)
+  let result = '$'+ getRandomInt(15) + '.'+ getRandomInt(9) + getRandomInt(9)
   return result;
 }
 

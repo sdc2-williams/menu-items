@@ -8,6 +8,7 @@ class App extends React.Component {
     this.state = {
       menu: []
     }
+    this.handleItemClick = this.handleItemClick.bind(this)
   }
 
   componentDidMount(){
@@ -16,11 +17,15 @@ class App extends React.Component {
     .then(menu => this.setState({menu: menu}))
   }
 
+  handleItemClick(e){
+    console.log(e.target.parentNode.id)
+  }
+
   render () {
     return (
-      <div>
+      <div className = 'app'>
         <h1>Dinner</h1>
-        <Menu menuItems = {this.state.menu}/>
+        <Menu menuItems = {this.state.menu} handleItemClick={this.handleItemClick}/>
       </div>)
   }
 }
