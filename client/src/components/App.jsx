@@ -10,17 +10,17 @@ class App extends React.Component {
     }
   }
 
-  // componentDidMount(){
-  //   fetch('/api/menu')
-  //   .then(res => res.json())
-  //   .then(menu => this.setState({menu: menu}))
-  // }
+  componentDidMount(){
+    fetch('/api/menu')
+    .then(res => res.json())
+    .then(menu => this.setState({menu: menu}))
+  }
 
   render () {
     return (
       <div>
         <h1>Dinner</h1>
-        {/* <Menu menuItems = {this.state.menu}/> */}
+        <Menu menuItems = {this.state.menu}/>
       </div>)
   }
 }

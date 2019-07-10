@@ -1,0 +1,10 @@
+.singleItem {
+  display: flex;
+}
+.itemPrice {
+  color: #5BDCBA;
+}
+
+.itemDescription {
+  color: #9DA2AE;
+}
