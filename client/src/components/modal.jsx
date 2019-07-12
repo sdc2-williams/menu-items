@@ -1,5 +1,5 @@
 import React from 'react';
-//import ModalFooter from './modalFooter.jsx';
+import ModalFooter from './modalFooter.jsx';
 import ModalBody from './modalBody.jsx';
 
 const modal = props => (
@@ -19,7 +19,7 @@ const modal = props => (
           <ModalBody name = {props.data.name} description={props.data.description} options={props.data.options}/>
       </div>
       <div className="modal-footer">
-                  {/* <ModalFooter price ={props.data.price}/> */}
+                  <ModalFooter price ={props.data.price}/>
         <button className="btn-cancel" onClick={props.close}>CLOSE</button>
       </div>
     </div>
