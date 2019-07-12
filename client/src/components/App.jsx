@@ -2,31 +2,30 @@ import React from 'react';
 import Menu from './menu.jsx';
 import Item from './item.jsx';
 
+const fetch = require('node-fetch');
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      menu: []
-    }
-    this.handleItemClick = this.handleItemClick.bind(this)
+      menu: [],
+    };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     fetch('/api/menu')
-    .then(res => res.json())
-    .then(menu => this.setState({menu: menu}))
+      .then(res => res.json())
+      .then(menu => this.setState({ menu }));
   }
 
-  handleItemClick(e){
-    console.log(e.target.parentNode.id)
-  }
-
-  render () {
+  render() {
+    console.log(this.state.menu)
     return (
-      <div className = 'app'>
+      <div className="app">
         <h1>Dinner</h1>
-        <Menu menuItems = {this.state.menu} handleItemClick={this.handleItemClick}/>
-      </div>)
+        <Menu menuItems={this.state.menu} />
+      </div>
+    );
   }
 }
 export default App;

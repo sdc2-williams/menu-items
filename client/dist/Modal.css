@@ -9,7 +9,7 @@
 }
 
 .modal-header {
-  background: #263238;
+  background: white;
   height: 40px;
   line-height: 40px;
   padding: 5px 20px;
@@ -17,7 +17,7 @@
 }
 
 .modal-header h3 {
-  color: white;
+  color: black;
   float: left;
   margin: 0;
   padding: 0;
@@ -29,7 +29,7 @@
 }
 
 .modal-footer {
-  background: #263238;
+  background: white;
   height: 35px;
   padding: 15px;
 }

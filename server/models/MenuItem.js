@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 
 /* Schema */
-let MenuItemSchema = mongoose.Schema({
+const MenuItemSchema = mongoose.Schema({
   name: String,
   description: String,
   price: String,
-  options: Object
+  options: Object,
+  menu: Array,
+  category: Array,
 });
 
 /* Model */
-const MenuItem = mongoose.model('MenuItem', MenuItemSchema)
+const MenuItem = mongoose.model('MenuItem', MenuItemSchema);
 
 /* Query */
-const getMenu = () => {
-  return MenuItem.find({}).lean()
-  .then(data => {
-    return(JSON.stringify(data))
-  })
-  .catch(err=>console.log('Query Error:' + err))
-}
+const getMenu = (params = {}) => MenuItem.find(params)
+  .then((data) => (JSON.stringify(data)))
+  .catch(err => console.log(`Query Error:${  err}`));
+
 module.exports.MenuItem = MenuItem;
 module.exports.getMenu = getMenu;
