@@ -24,6 +24,7 @@ class Menu extends React.Component {
   closeModal() {
     this.setState({
       showModal: false,
+      modalData: {}
     });
   }
 

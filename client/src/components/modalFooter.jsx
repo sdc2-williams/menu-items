@@ -4,17 +4,19 @@ class ModalFooter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // oldPrice: props.price,
-      // price: props.price,
       price: 0,
       oldPrice: 0,
       count: 1
     };
     this.IncrementItem = this.IncrementItem.bind(this)
     this.DecreaseItem = this.DecreaseItem.bind(this)
+    this.closeEvent = this.closeEvent.bind(this)
   }
 
-
+  closeEvent() {
+    this.setState({price: 0, oldPrice: 0, count: 1})
+    this.props.clickHandler()
+  }
   IncrementItem() {
     let price = parseFloat(this.state.price)
     let oldPrice = parseFloat(this.state.oldPrice)
@@ -28,7 +30,7 @@ class ModalFooter extends React.Component {
 
   static getDerivedStateFromProps(next, state) {
     if (!state.price) {
-      return {price: next.price, oldPrice: next.price}
+      return {price: next.price, oldPrice: next.price, count: 1}
     } else {
       return null;
     }
@@ -41,7 +43,7 @@ class ModalFooter extends React.Component {
         <button className="btn-minus" onClick={this.DecreaseItem}> - </button>
         <span>{this.state.count}</span>
         <button className="btn-plus" onClick = {this.IncrementItem}> + </button>
-        <button className="btn-cancel" onClick={this.props.clickHandler}> ADD TO CART {this.state.price}</button>
+        <button className="btn-cancel" onClick={this.closeEvent}> ADD TO CART {this.state.price}</button>
         </div>
       </div>
     );
