@@ -13,13 +13,14 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/menu')
+    const id = window.location.pathname.substring(1)
+    fetch(`/api/menu/${id}`)
       .then(res => res.json())
-      .then(menu => this.setState({ menu }));
+      .then(menu => this.setState({ menu }))
+      .catch(err => console.log(err))
   }
 
   render() {
-    console.log(this.state.menu)
     return (
       <div className="app">
         <h1>Dinner</h1>

@@ -7,14 +7,14 @@ const MenuItemSchema = mongoose.Schema({
   price: String,
   options: Object,
   menu: Array,
-  category: Array,
+  category: Number,
 });
 
 /* Model */
 const MenuItem = mongoose.model('MenuItem', MenuItemSchema);
 
 /* Query */
-const getMenu = (params = {}) => MenuItem.find(params)
+const getMenu = (params) => MenuItem.find(params)
   .then((data) => (JSON.stringify(data)))
   .catch(err => console.log(`Query Error:${  err}`));
 

@@ -51,11 +51,11 @@ function getRandomMenuItem() {
 
 /* Random Price */
 function getRandomPrice() {
-  const result = `$${getRandomInt(15)}.${getRandomInt(9)}${getRandomInt(9)}`;
+  const result = `${getRandomInt(15)}.${getRandomInt(9)}${getRandomInt(9)}`;
   return result;
 }
 
-/* New Menu Item */
+/* New Menu Item*/
 const randomItem = Model => new Model({
   name: getRandomMenuItem(),
   description: getRandomDescription(),
@@ -63,55 +63,107 @@ const randomItem = Model => new Model({
   options: getRandomMenuItemOptions(),
 });
 
-/* Seed Function */
-function seed(models, cb) {
-  for (const i in models) {
-    const prom = models[i].save(cb);
-    if (i == models.length) {
-      prom.then((err) => {
-        process.exit(err ? 0 : 1);
-      });
-    }
+function seed(n, Model){
+  // Seed a specified collection with N documents
+  // @param n <Number> The total number of documents to seed
+  // @param Model <mongoose.Model> The collection to seed
+  const menus = Array.from({length: n}, function(e,i){ return(i+1) })
+  return new Promise(function(resolve, reject){
+    async.eachSeries(menus, function(m, done){
+      const model = randomItem(Model)
+      model.save(function(){
+        done()
+      })
+    }, function(err, result){
+      err ? reject(err) : resolve(result)
+    })
+  })
+
+}
+
+function * categoryGenerator(categories){
+  // Sequentially return a single element from an array
+  // @param categories <Array> Spellec with an 'e' and not an 'a'
+  // @example g = categoryGenerator([1,2,3]); g.next().value; // 1
+  while(true){
+    yield * categories
   }
 }
 
-function generateRandom(n, Model) {
-  const models = [];
-  for (let i = 0; i < n; i++) {
-    models.push(randomItem(Model));
+function seedMenus(n, p, menus, categories, Model) {
+  // The primary method used to seed categories and menus
+  // @param n <Number> The number of docs to update per iteration
+  // @param m <Number> The number of menus a given doc pertains to
+  // @param menus <Array> A list of all possible menus
+  // @param categories <Array> A list of all possible categories
+  // @param model <mongoose.Model> The mongoose collection in which updates will be applied
+  const catGen = categoryGenerator(categories)
+  let c = catGen.next().value
+  return new Promise(function(resolve, reject){
+    async.eachSeries(menus, function(menu, done) {
+      const m = menus[Math.floor(Math.random()*menus.length)]
+    Model.find({ /*$where: 'this.menu.length < ' + p */})
+      .limit(n)
+      .exec(function(err, result){
+        const ids = result.map(function(r){
+          return r._id
+        })
+        Model.updateMany({_id:ids}, {
+          $push: {
+            menu: m
+          },
+          category: c
+        }).exec(function(err, result){
+          c = catGen.next().value
+          done()
+        })
+      })
+    }, function(err, result){
+      err ? reject(err) : resolve(result)
+    })
+  })
+}
+
+function _logger(menus, Model){
+  // Log the model
+  // @param menus <Array> The menus array
+  // @param menus <mongoose.Model> The collection to seed
+  for(let i=1; i<menus.length; i++){
+    Model.find({$where : 'this.menu.indexOf(' + i + ') != -1'})
+    .limit(menus.length)
+    .exec(function(err, menu_i){
+      menu_i.map(function(item_i){
+        Model.find({_id:item_i._id}).sort('menu').exec(function(err, menu_j){
+          menu_j.map(function(item_j){
+            console.log('\t' + menu_i.length + ' items in menu #' + i + '\twith category #' + item_j.category)
+          })
+        })
+      })
+    })
   }
-  return (models);
+}
+
+function _sweep(Model){
+  // Clear the DB before seeding
+  // @param <mongoose.Model> The collection to seed
+  return Model.deleteMany({})
 }
 
 
-function seedMenus(n, menus, categories) {
-  async.eachSeries(menus, (m, done) => {
-    async.eachSeries(categories, (c, done) => {
-      MenuDB.MenuItem.updateMany({
-        menu: { $ne: m },
-        category: { $ne: c },
-      },
-      {
-        $push: {
-          menu: m,
-          category: c,
-        },
-      },
-      { limit: 30 }, done);
-    }, done);
-  }, (err, res) => {
-    console.log(err)
-    console.log(res)
-  });
-}
-
-seed(generateRandom(100, MenuDB.MenuItem),
-  (err, res) => {
-    if (!err) {
-      // console.log(res);
-    } else {
-      // console.error(err);
+/* Implementation */
+_sweep(MenuDB.MenuItem)
+.exec(function(){
+  seed(290, MenuDB.MenuItem)
+  .then(function(){
+      seedMenus(30, 40, menus, categories, MenuDB.MenuItem)
+      .then(function(){
+        _logger(menus, MenuDB.MenuItem)
+      })
+      .catch(function(err){
+        console.error(err)
+      })
     }
-  });
-
-seedMenus(10, menus, categories);
+  ).catch(function(err){
+    console.error(err)
+  })
+})

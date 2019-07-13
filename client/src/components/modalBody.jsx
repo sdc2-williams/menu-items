@@ -1,20 +1,34 @@
 import React from 'react';
 
-const ModalBody = props => (
-  <div>
+const ModalBody = props => {
+
+let options = props.options ? Object.keys(props.options) : []
+
+ return(
+ <div>
     <div>
-      <h3>{props.name}</h3>
-      <h1>{props.description}</h1>
+      <h1 className ="itemName">{props.name}</h1>
+      <h3 className ="itemDescription">{props.description}</h3>
     </div>
     <div>
-        {/* {
-          Object.entries(props.options).map((option) => {
-            <input type="checkbox" value={option[0]}>
-            <label>{options[1]}<label/>
-          })
-        } */}
+      <form>
+        <fieldset>
+        <legend>Options</legend>
+          {
+            options.map((item) => {
+              return (
+                <div>
+                  <input type="checkbox" id="checklist" name="subscribe" value="newsletter"></input>
+                  <label for="subscribeNews">{item}</label>
+                </div>
+              )
+            })
+          }
+        </fieldset>
+      </form>
     </div>
   </div>
-);
+ )
+};
 
 export default ModalBody;

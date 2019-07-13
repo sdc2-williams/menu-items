@@ -30,14 +30,12 @@ class Menu extends React.Component {
   handleItemClick(e) {
     for (const i in this.props.menuItems) {
       if (e.target.parentNode.id === this.props.menuItems[i]._id) {
-        this.setState({ modalData: this.props.menuItems[i] });
-        this.openModal();
+        this.setState({ modalData: this.props.menuItems[i] }, this.openModal);
       }
     }
   }
 
   render() {
-    console.log(this.state.modalData)
     return (
       <>
         { this.state.showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
