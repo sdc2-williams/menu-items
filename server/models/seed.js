@@ -7,6 +7,7 @@ mongoose.connect('mongodb://localhost/menu', { useNewUrlParser: true }).then(() 
 /* Menu Names */
 const menus = Array.from({ length: 100 }, (e, i) => i + 1);
 const categories = [1, 2, 3];
+const Model = MenuDB.MenuItem;
 
 const menuNames = ['Burger', 'Chicken', 'Cheese', 'Nuggets', 'Sandwich', 'Big', 'Double', 'Triple', 'Mac', 'Swiss', 'BBQ', 'SweetNSour', 'Bacon', 'Chocolate', 'Spicy', 'Vanilla', 'Hot', 'Fish', 'Filet', 'Hotcakes', 'Muffin', 'Sausage', 'Tenders', 'Burrito', 'Strawberry', 'Egg', 'Parfait', 'Grand', 'Deluxe'];
 
@@ -56,114 +57,181 @@ function getRandomPrice() {
 }
 
 /* New Menu Item*/
-const randomItem = Model => new Model({
+const randomItem = Model => ({
   name: getRandomMenuItem(),
   description: getRandomDescription(),
   price: getRandomPrice(),
   options: getRandomMenuItemOptions(),
 });
 
-function seed(n, Model){
+// This script seeds a MongoDB collection with docs of the following format:
+//
+// collection = {
+//   doc: {
+//     name: String,
+//     description: String,
+//     price: String,
+//     options: Object,
+//     menu: Array,
+//     category: Number,
+//   }
+// }
+//
+// Conceptually, the collection must conform to the following rules:
+//   - Each menu from an array of possible menus of length M contains all categories in an array of possible categories of length P.
+//   - Each category in each menu contains N docs sampled from an array of all docs of length Q.
+//   - If Q < M * P * N, sampling docs is performed with replacement after all docs have been used to fill M menus.
+//
+// menus = [
+//   {
+//     category_1: [
+//       doc_1, doc_2, doc_N
+//     ],
+//     category_2: [
+//       doc_1, doc_2, doc_N
+//     ],
+//     category_P: [
+//       doc_1, doc_2, doc_N
+//     ]
+//   }
+// ]
+function chunk(arr, chunk) {
+  const r = [];
+  for (var i=0; i<arr.length; i+=chunk)
+    r.push(arr.slice(i, i+chunk));
+  return(r)
+}
+
+async function qQuery(N, doc, Model) {
+  const out = []
+  const results = await Model.find({}, doc)
+  const iter = Array.from({length:Math.ceil(results.length/N)})
+  for(i in iter){
+    out.push(chunk(results, N)[i].map(function(id, idx){
+      return(id._id)
+    }))
+  }
+  return(out)
+}
+
+async function * fieldGenerator(N, field, Model) {
+  const fieldResults = await qQuery(N, field, Model)
+  while(true){
+    yield * fieldResults
+  }
+}
+
+async function seed(n, Model, doc){
   // Seed a specified collection with N documents
   // @param n <Number> The total number of documents to seed
   // @param Model <mongoose.Model> The collection to seed
-  const menus = Array.from({length: n}, function(e,i){ return(i+1) })
-  return new Promise(function(resolve, reject){
-    async.eachSeries(menus, function(m, done){
-      const model = randomItem(Model)
-      model.save(function(){
-        done()
-      })
-    }, function(err, result){
-      err ? reject(err) : resolve(result)
-    })
-  })
-
-}
-
-function * categoryGenerator(categories){
-  // Sequentially return a single element from an array
-  // @param categories <Array> Spellec with an 'e' and not an 'a'
-  // @example g = categoryGenerator([1,2,3]); g.next().value; // 1
-  while(true){
-    yield * categories
+  // @param doc <Object> The doc to seed in the collection
+  const results = []
+  const M = Array.from({length: n}, function(e,i){ return( i+1 ) })
+  for(m in M){
+    const model = new Model(doc())
+    const result = await model.save()
+    results.push(result)
   }
+  return(results)
 }
 
-function seedMenus(n, p, menus, categories, Model) {
-  // The primary method used to seed categories and menus
-  // @param n <Number> The number of docs to update per iteration
-  // @param m <Number> The number of menus a given doc pertains to
-  // @param menus <Array> A list of all possible menus
+async function updateMenus(n, categories, menus, Model){
+  // The primary method used to seed categories and menus of each menu item
+  // @param n <Number> The number of items in each category of a single menu
   // @param categories <Array> A list of all possible categories
-  // @param model <mongoose.Model> The mongoose collection in which updates will be applied
-  const catGen = categoryGenerator(categories)
-  let c = catGen.next().value
-  return new Promise(function(resolve, reject){
-    async.eachSeries(menus, function(menu, done) {
-      const m = menus[Math.floor(Math.random()*menus.length)]
-    Model.find({ /*$where: 'this.menu.length < ' + p */})
-      .limit(n)
-      .exec(function(err, result){
-        const ids = result.map(function(r){
-          return r._id
-        })
-        Model.updateMany({_id:ids}, {
-          $push: {
-            menu: m
+  // @param menus <Array> A list of all possible menus
+  // @param Model <mongoose.Model> The collection in which updates will be applied
+  console.log('Seeding...')
+  const results = []
+  const idGenerator = fieldGenerator(n, '_id', Model)
+  let chunk
+  for(menu of menus){
+    for(category of categories){
+      chunk = await idGenerator.next()
+      const field = {
+        query: {
+          _id: {
+            $in: chunk.value
+          }
+        },
+        update: {
+          $push:{
+            menu: menu
           },
-          category: c
-        }).exec(function(err, result){
-          c = catGen.next().value
-          done()
-        })
-      })
-    }, function(err, result){
-      err ? reject(err) : resolve(result)
-    })
-  })
+          category: category
+        }
+      }
+      const result = await Model.updateMany(field.query, field.update)
+      results.push(result)
+      if(category === 2 && menu===34){
+        console.log(result)
+        console.log('Menu: ', field.update.$push.menu)
+        console.log('Category: ', field.update.category)
+      }
+    }
+  }
+  return(results)
 }
 
-function _logger(menus, Model){
-  // Log the model
-  // @param menus <Array> The menus array
-  // @param menus <mongoose.Model> The collection to seed
+async function _logger(menus, Model, log){
+  // Log the model and check for conformity
+  // @param menus <Array> An array of all menus to log
+  // @param Model <mongoose.Model> The collection to log
+  // @log log <Boolean> Log the output to console?
+  const scaffold = []
+  const messages = []
+  let status = true
+  console.log('Preparing summary...')
   for(let i=1; i<menus.length; i++){
-    Model.find({$where : 'this.menu.indexOf(' + i + ') != -1'})
-    .limit(menus.length)
-    .exec(function(err, menu_i){
-      menu_i.map(function(item_i){
-        Model.find({_id:item_i._id}).sort('menu').exec(function(err, menu_j){
-          menu_j.map(function(item_j){
-            console.log('\t' + menu_i.length + ' items in menu #' + i + '\twith category #' + item_j.category)
-          })
-        })
-      })
-    })
+    scaffold[i] = []
+    const categories = []
+    const menu_i = await Model.find({$where : 'this.menu.indexOf(' + i + ') != -1'})
+    for(item_j of menu_i){
+      const cat_k = parseInt(item_j.category)
+      categories[cat_k] = categories[cat_k] ? categories[cat_k]+1 : 1
+    }
+    const substrings = categories.map(function(n,c){ return((parseInt(c)?'\b\b':'\b ') + n + ' docs in category ' + c + '\b\n\t') })
+    const msg = 'Menu #' + i + ' has:\n\t' + substrings
+    messages.push(msg)
+    status = categories.every(function(val, i, arr){ val === arr[0] })
+    scaffold[i].push(categories)
   }
+  if(log){
+    for(m of messages) console.log(m)
+    if(!status){
+      console.log('\All menus DO NOT contain the same number of items in each category. See \'scaffold\' in the return value for details.')
+    }else{
+      console.log('\nAll menus contain categories of sizes' + String(scaffold[scaffold.length-1]).replace(',', ' '))
+    }
+  }
+  return(
+    {
+      scaffold: scaffold,
+      messages: messages,
+      status: status
+    }
+  )
 }
 
 function _sweep(Model){
-  // Clear the DB before seeding
+  // Clear the collection before seeding
   // @param <mongoose.Model> The collection to seed
+  console.log('Clearing collection...')
   return Model.deleteMany({})
 }
 
-
-/* Implementation */
-_sweep(MenuDB.MenuItem)
+_sweep(Model)
 .exec(function(){
-  seed(290, MenuDB.MenuItem)
+  seed(1000, Model, randomItem)
+  .catch(function(err){ console.error(err) })
   .then(function(){
-      seedMenus(30, 40, menus, categories, MenuDB.MenuItem)
-      .then(function(){
-        _logger(menus, MenuDB.MenuItem)
+    updateMenus(10, categories, menus, Model)
+    .catch(function(err){ console.error(err) })
+    .then(function(){
+      _logger(menus, Model, true).then(function(res){
+        process.exit()
       })
-      .catch(function(err){
-        console.error(err)
-      })
-    }
-  ).catch(function(err){
-    console.error(err)
+    })
   })
 })

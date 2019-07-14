@@ -1,11 +1,12 @@
 import React from 'react';
 import ModalFooter from './modalFooter.jsx';
 import ModalBody from './modalBody.jsx';
+import styled from 'styled-components';
+
+
 
 const modal = (props) => (
   <div>
-    {console.log(props.data.price)}
-    {console.log(props.data.name)}
     <div
       className="modal-wrapper"
       style={{

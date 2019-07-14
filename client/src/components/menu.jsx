@@ -1,7 +1,16 @@
 import React from 'react';
 import Item from './item.jsx';
 import Modal from './modal.jsx';
+import styled from 'styled-components'
 
+const Container = styled.div`
+@media screen and (min-width: 1061px){
+  padding-top: 16px;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+  justify-content: space-between;
+}
+`
 
 class Menu extends React.Component {
   constructor(props) {
@@ -39,6 +48,9 @@ class Menu extends React.Component {
   render() {
     return (
       <>
+        <Container className="menu">
+            {this.props.menuItems.map(item => <Item item={item} handleItemClick={this.handleItemClick} />)}
+        </Container>
         { this.state.showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
         <Modal
           data ={this.state.modalData}
@@ -47,11 +59,6 @@ class Menu extends React.Component {
           close={this.closeModal}
         >
         </Modal>
-        <div className="menu">
-          <ul>
-            {this.props.menuItems.map(item => <Item item={item} handleItemClick={this.handleItemClick} />)}
-          </ul>
-        </div>
       </>
     );
   }
