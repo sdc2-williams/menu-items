@@ -9,9 +9,9 @@ const Container = styled.div`
     margin: 0 auto;
     box-sizing: content-box;
   }
+
 `
 const Title = styled.h2`
-  font-family: Calibri, "Helvetica", san-serif;
   width: 100%
   border-bottom: 1px solid #ECEDEF;
   padding-bottom: 3px
@@ -26,6 +26,7 @@ class App extends React.Component {
     };
   }
 
+
   componentDidMount() {
     const id = window.location.pathname.substring(1)
     fetch(`/api/menu/${id}`)
@@ -34,11 +35,16 @@ class App extends React.Component {
       .catch(err => console.log(err))
   }
 
+
   render() {
     return (
       <Container className="app">
-        <Title>Dinner</Title>
-        <Menu menuItems={this.state.menu} />
+        <Title>Popular Items</Title>
+        <Menu menuItems={this.state.menu.slice(0,10)} />
+        <Title>All Day Breakfast</Title>
+        <Menu menuItems={this.state.menu.slice(10,20)} />
+        <Title>Happy Meals</Title>
+        <Menu menuItems={this.state.menu.slice(20,30)} />
       </Container>
     );
   }

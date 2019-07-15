@@ -14,10 +14,6 @@ app.use('/:menu', express.static(path.join(__dirname, '../client/dist')));
 app.use(parser.json());
 app.use(parser.urlencoded({extended: false}))
 
-// app.get('/', function(req, res){
-//   res.sendFile('Hello')
-// })
-
 app.get('/api/menu/:menu', function(req, res) {
   var menu = parseInt(req.params.menu);
   MenuItem.getMenu({menu:menu}).then(data => res.status(202).send(data)).catch(err => console.log(`API Error:${err}`));
