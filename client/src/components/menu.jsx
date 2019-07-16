@@ -6,9 +6,6 @@ import Item from './item.jsx';
 const Container = styled.div`
   @media screen and (min-width: 1061px){
     padding-top: 16px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -19,7 +16,7 @@ const Container = styled.div`
 const Menu = ({ menuItems }) => (
 
   <Container className="menu">
-    {menuItems.map(item => <Item item={item} menuItems={menuItems} />)}
+    {menuItems.map(item => <Item item={item} menuItems={menuItems} className="itemTest" />)}
   </Container>
 
 );

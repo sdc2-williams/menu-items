@@ -30,7 +30,7 @@ class App extends React.Component {
 
   componentDidMount() {
     const id = window.location.pathname.substring(1);
-    fetch(`/api/menu/${id}`)
+    fetch(`http://localhost:3000/api/menu/${id}`)
       .then(res => res.json())
       .then(menu => this.setState({ menu }))
       .catch(err => console.log(err));

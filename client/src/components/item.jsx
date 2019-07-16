@@ -32,7 +32,6 @@ const Name = styled.h3`
   white-space: nowrap;
 `;
 const Description = styled.div`
-  -webkit-box-orient: vertical;
   font-family: 'PostmatesStd',Helvetica Neue,Helvetica;
   font-size: 14px;
   line-height: 1.43;
@@ -86,11 +85,10 @@ class Item extends React.Component {
   }
 
   render() {
-    console.log(this.state.modalData);
     return (
-      <>
-        <Container>
-          <Body className="singleItem" id={this.props.item._id} onClick={this.handleItemClick}>
+
+        <Container className="singleItem">
+          <Body  id={this.props.item._id} onClick={this.handleItemClick}>
             { this.state.showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
             <Modal
               data={this.state.modalData}
@@ -101,12 +99,12 @@ class Item extends React.Component {
             <Name className="itemName">{this.props.item.name}</Name>
             <Description className="itemDescription">{this.props.item.description}</Description>
             <Price className="itemPrice">
-                $
+              $
               {this.props.item.price}
             </Price>
           </Body>
         </Container>
-      </>
+
     );
   }
 }

@@ -16,7 +16,11 @@ app.use(parser.urlencoded({extended: false}))
 
 app.get('/api/menu/:menu', function(req, res) {
   var menu = parseInt(req.params.menu);
-  MenuItem.getMenu({menu:menu}).then(data => res.status(202).send(data)).catch(err => console.log(`API Error:${err}`));
+  if (menu > 100) {
+    res.status(404).send()
+  }else{
+    MenuItem.getMenu({menu:menu}).then(data => res.status(202).send(data)).catch(err => console.log(`API Error:${err}`));
+  }
 });
 
 app.listen(PORT, () => {
