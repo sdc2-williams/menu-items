@@ -1,17 +1,27 @@
 import React from 'react';
+import styled from 'styled-components';
 import ModalFooter from './modalFooter.jsx';
 import ModalBody from './modalBody.jsx';
-import styled from 'styled-components'
 
 const Modal = styled.div`
-  @media screen and (min-width: 1060px) {
-    max-width: 524px;
-    height: 100%;
-    width: 100%;
-    max-height: 600px;
-    overflow: hidden;
+  @media screen and (min-width: 1060px)
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    box-sizing: border-box;
   }
-`
+`;
+
+const ModalBody1 = styled.div`
+  @media screen and (min-width: 1060px){
+      height: calc(100% - 80px);
+      overflow-y: auto;
+      border-bottom: 1px solid rgba(217, 219, 224, 0.5);
+      position: relative;
+      padding: 20px
+  }
+`;
 
 const modal = props => (
   <Modal>
@@ -22,14 +32,15 @@ const modal = props => (
         opacity: props.show ? '1' : '0',
       }}
     >
-      <div className="modal-header">
+      <ModalBody1 clasName="footer">
+        <div className="modal-header" />
         <span className="close-modal-btn" onClick={props.close}>×</span>
-      </div>
-      <div className="modal-body">
-          <ModalBody name = {props.data.name} description={props.data.description} options={props.data.options}/>
-      </div>
+        <div className="modal-body">
+          <ModalBody name={props.data.name} description={props.data.description} options={props.data.options} />
+        </div>
+      </ModalBody1>
       <div className="modal-footer">
-          <ModalFooter price = {props.data.price} clickHandler = {props.close}/>
+        <ModalFooter price={props.data.price} clickHandler={props.close} />
       </div>
     </div>
   </Modal>
