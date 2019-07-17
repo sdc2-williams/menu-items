@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import Item from './item.jsx';
@@ -14,11 +15,9 @@ const Container = styled.div`
 `;
 
 const Menu = ({ menuItems }) => (
-
   <Container className="menu">
     {menuItems.map(item => <Item item={item} menuItems={menuItems} className="itemTest" />)}
   </Container>
-
 );
 
 export default Menu;
