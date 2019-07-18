@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -35,26 +38,27 @@ const Label = styled.div`
   font-weight: 400;
   line-height: normal;
 `;
-const ModalBody = (props) => {
-  const options = props.options ? Object.keys(props.options) : [];
+const ModalBody = ({ name, description, options }) => {
+  const modalOptions = options ? Object.keys(options) : [];
 
   return (
     <div>
       <div>
-        <Name className="itemName">{props.name}</Name>
-        <Description className="itemDescription">{props.description}</Description>
+        <Name className="itemName">{name}</Name>
+        <Description className="itemDescription">{description}</Description>
         <Extras>Extra Add-Ons</Extras>
       </div>
       <div>
         <form>
           <fieldset>
             {
-            options.map(item => (
+            modalOptions.map(item => (
               <div>
                 <Label>
-                <label className="container">{item}
-                  <input type="checkbox" className="checklist" />
-                  <span className="checkmark" />
+                  <label className="container">
+                    {item}
+                    <input type="checkbox" className="checklist" />
+                    <span className="checkmark" />
                   </label>
                 </Label>
               </div>
