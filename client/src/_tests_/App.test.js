@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount, render } from 'enzyme';
-import App from '../components/App.jsx';
+import MenuItems from '../components/MenuItems.jsx';
 import Item from '../components/item.jsx'
 
 
