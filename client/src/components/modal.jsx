@@ -1,3 +1,7 @@
+/* eslint-disable import/extensions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import ModalFooter from './modalFooter.jsx';
@@ -23,24 +27,24 @@ const ModalBody1 = styled.div`
   }
 `;
 
-const modal = props => (
+const modal = ({ data, show, close }) => (
   <Modal>
     <div
       className="modal-wrapper"
       style={{
-        transform: props.show ? 'translateY(0vh)' : 'translateY(100vh)',
-        opacity: props.show ? '1' : '0',
+        transform: show ? 'translateY(0vh)' : 'translateY(100vh)',
+        opacity: show ? '1' : '0',
       }}
     >
       <ModalBody1 clasName="footer">
         <div className="modal-header" />
-        <span className="close-modal-btn" onClick={props.close}>×</span>
+        <span className="close-modal-btn" onClick={close}>×</span>
         <div className="modal-body">
-          <ModalBody name={props.data.name} description={props.data.description} options={props.data.options} />
+          <ModalBody name={data.name} description={data.description} options={data.options} />
         </div>
       </ModalBody1>
       <div className="modal-footer">
-        <ModalFooter price={props.data.price} clickHandler={props.close} />
+        <ModalFooter price={data.price} clickHandler={close} />
       </div>
     </div>
   </Modal>
