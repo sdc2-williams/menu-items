@@ -2,6 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import MenuItems from './components/App.jsx';
+import MenuItems from './components/MenuItems.jsx';
 
 ReactDOM.render(<MenuItems />, document.getElementById('app'));
