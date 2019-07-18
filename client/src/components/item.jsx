@@ -103,7 +103,6 @@ class Item extends React.Component {
 
       <Container className="singleItem">
         <Body id={_id} onClick={this.handleItemClick}>
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           { showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
           <Modal
             data={modalData}

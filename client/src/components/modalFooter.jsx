@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/button-has-type */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -52,23 +55,6 @@ class ModalFooter extends React.Component {
     this.closeEvent = this.closeEvent.bind(this);
   }
 
-  closeEvent() {
-    this.setState({ price: 0, oldPrice: 0, count: 1 });
-    this.props.clickHandler();
-  }
-
-  IncrementItem() {
-    const price = parseFloat(this.state.price);
-    const oldPrice = parseFloat(this.state.oldPrice);
-    const newPrice = parseFloat(price + oldPrice).toFixed(2);
-    this.setState({ price: newPrice, count: this.state.count + 1 });
-    console.log(this.state);
-  }
-
-  DecreaseItem() {
-    this.setState({ price: this.state.price - this.state.oldPrice, count: this.state.count - 1 });
-  }
-
   static getDerivedStateFromProps(next, state) {
     if (!state.price) {
       return { price: next.price, oldPrice: next.price, count: 1 };
@@ -76,16 +62,40 @@ class ModalFooter extends React.Component {
     return null;
   }
 
+  DecreaseItem() {
+    const { price, oldPrice, count } = this.state;
+    this.setState({ price: price - oldPrice, count: count - 1 });
+  }
+
+  IncrementItem() {
+    const { price, oldPrice, count } = this.state;
+    const incrementPrice = parseFloat(price);
+
+    const incrementOldPrice = parseFloat(oldPrice);
+
+    const newPrice = parseFloat(incrementPrice + incrementOldPrice).toFixed(2);
+    this.setState({ price: newPrice, count: count + 1 });
+  }
+
+  closeEvent() {
+    const { clickHandler } = this.props;
+    this.setState({ price: 0, oldPrice: 0, count: 1 });
+    clickHandler();
+  }
+
   render() {
+    const { price, count } = this.state;
     return (
       <Foot>
         <Left className="increment-btn">
           <button className="btn-minus" onClick={this.DecreaseItem}> -  </button>
-          <span className="countSpan">{this.state.count}</span>
+          <span className="countSpan">{count}</span>
           <button className="btn-plus" onClick={this.IncrementItem}>  + </button>
         </Left>
         <div>
-          <button className="btn-cancel" onClick={this.closeEvent}>ADD TO CART  {this.state.price}</button>
+          <button className="btn-cancel" onClick={this.closeEvent}>
+            <span>ADD TO CART   {price}</span>
+          </button>
         </div>
       </Foot>
     );
