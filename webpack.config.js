@@ -6,8 +6,20 @@ const DIST_DIR = path.join(__dirname, '/client/dist');
 module.exports = {
   entry: `${SRC_DIR}/index.jsx`,
   output: {
-    filename: 'bundle.js',
+    filename: 'menuitems.js',
     path: DIST_DIR,
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        },
+      },
+    },
   },
   module: {
     rules: [
@@ -23,5 +35,10 @@ module.exports = {
         },
       },
     ],
+  },
+  resolve: {
+    alias: {
+      'styled-components': path.resolve(__dirname, 'node_modules', 'styled-components'),
+    },
   },
 };
