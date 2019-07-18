@@ -41,6 +41,29 @@ const Left = styled.div`
     border-image: initial;
     border-radius: 100px;
 `;
+const CancelButton = styled.button`
+  font-family: PostmatesStd, "Helvetica Neue", Helvetica;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  line-height: normal;
+  text-align: center;
+  height: 56px;
+  background-color: rgb(0, 204, 153);
+  color: rgb(255, 255, 255);
+  width: 100%;
+  display: flex;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  font-weight: 600;
+  -webkit-box-align: center;
+  align-items: center;
+  margin: 0px;
+  outline: none;
+  transition: background-color 0.2s ease-in-out 0s, color 0.2s ease-in-out 0s;
+  padding: 0px 16px;
+  border-radius: 28px;
+
+`;
 
 class ModalFooter extends React.Component {
   constructor(props) {
@@ -93,9 +116,9 @@ class ModalFooter extends React.Component {
           <button className="btn-plus" onClick={this.IncrementItem}>  + </button>
         </Left>
         <div>
-          <button className="btn-cancel" onClick={this.closeEvent}>
+          <CancelButton className="btn-cancel" onClick={this.closeEvent}>
             <span>ADD TO CART   {price}</span>
-          </button>
+          </CancelButton>
         </div>
       </Foot>
     );
