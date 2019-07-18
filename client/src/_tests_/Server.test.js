@@ -1,8 +1,7 @@
-const express = require('express');
+/* eslint-disable no-undef */
 const request = require('supertest');
 
 describe('Express server', () => {
-
   it('Respond to a valid GET request to /api/menu/1', async () => {
     const response = await request('http://localhost:3000').get('/api/menu/1');
     expect(response.statusCode).toBe(202);
@@ -17,5 +16,4 @@ describe('Express server', () => {
     const response = await request('http://localhost:3000').get('/api/menu/200');
     expect(response.statusCode).toBe(404);
   });
-
 });
