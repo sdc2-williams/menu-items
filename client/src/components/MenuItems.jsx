@@ -20,7 +20,7 @@ const Title = styled.h2`
 `;
 const fetch = require('node-fetch');
 
-class App extends React.Component {
+class MenuItems extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,4 +52,4 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+export default MenuItems;
