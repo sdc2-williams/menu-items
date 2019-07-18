@@ -31,7 +31,7 @@ class MenuItems extends React.Component {
 
   componentDidMount() {
     const id = window.location.pathname.substring(1);
-    fetch(`http://localhost:3000/api/menu/${id}`)
+    fetch(`/api/menu/${id}`)
       .then(res => res.json())
       .then(menu => this.setState({ menu }))
       .catch((err) => { throw err; });
