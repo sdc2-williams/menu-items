@@ -1,10 +1,9 @@
+/* eslint-disable no-undef */
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
-import App from '../components/App.jsx';
-import Item from '../components/item.jsx'
+import { mount } from 'enzyme';
+import MenuItems from '../components/MenuItems.jsx';
 
-
-const wrapper = mount(<App />);
+const wrapper = mount(<MenuItems />);
 
 
 describe('Rendering App component', () => {
@@ -18,4 +17,3 @@ describe('Rendering Item component', () => {
     expect(wrapper.find('.menu').exists()).toBe(true);
   });
 });
-

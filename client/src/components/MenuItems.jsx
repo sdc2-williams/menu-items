@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import React from 'react';
 import styled from 'styled-components';
 import Menu from './menu.jsx';
@@ -19,7 +20,7 @@ const Title = styled.h2`
 `;
 const fetch = require('node-fetch');
 
-class App extends React.Component {
+class MenuItems extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,24 +31,25 @@ class App extends React.Component {
 
   componentDidMount() {
     const id = window.location.pathname.substring(1);
-    fetch(`http://localhost:3000/api/menu/${id}`)
+    fetch(`/api/menu/${id}`)
       .then(res => res.json())
       .then(menu => this.setState({ menu }))
-      .catch(err => console.log(err));
+      .catch((err) => { throw err; });
   }
 
 
   render() {
+    const { menu } = this.state;
     return (
       <Container className="app">
         <Title>Popular Items</Title>
-        <Menu menuItems={this.state.menu.slice(0, 10)} />
+        <Menu menuItems={menu.slice(0, 10)} />
         <Title>All Day Breakfast</Title>
-        <Menu menuItems={this.state.menu.slice(10, 20)} />
+        <Menu menuItems={menu.slice(10, 20)} />
         <Title>Happy Meals</Title>
-        <Menu menuItems={this.state.menu.slice(20, 30)} />
+        <Menu menuItems={menu.slice(20, 30)} />
       </Container>
     );
   }
 }
-export default App;
+export default MenuItems;

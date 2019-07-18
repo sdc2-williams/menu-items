@@ -1,3 +1,8 @@
+/* eslint-disable import/extensions */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable comma-dangle */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 import Modal from './modal.jsx';
@@ -77,33 +82,42 @@ class Item extends React.Component {
   }
 
   handleItemClick(e) {
-    for (const i in this.props.menuItems) {
-      if (e.target.parentNode.id === this.props.menuItems[i]._id) {
-        this.setState({ modalData: this.props.menuItems[i] }, this.openModal);
+    const { menuItems } = this.props;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < menuItems.length; i++) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (e.target.parentNode.id === menuItems[i]._id) {
+        this.setState({ modalData: menuItems[i] }, this.openModal);
       }
     }
   }
 
   render() {
+    const { modalData, showModal } = this.state;
+    const { item } = this.props;
+    const {
+      name, description, price, _id,
+    } = item;
+
     return (
 
-        <Container className="singleItem">
-          <Body  id={this.props.item._id} onClick={this.handleItemClick}>
-            { this.state.showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
-            <Modal
-              data={this.state.modalData}
-              className="modal"
-              show={this.state.showModal}
-              close={this.closeModal}
-            />
-            <Name className="itemName">{this.props.item.name}</Name>
-            <Description className="itemDescription">{this.props.item.description}</Description>
-            <Price className="itemPrice">
-              $
-              {this.props.item.price}
-            </Price>
-          </Body>
-        </Container>
+      <Container className="singleItem">
+        <Body id={_id} onClick={this.handleItemClick}>
+          { showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
+          <Modal
+            data={modalData}
+            className="modal"
+            show={showModal}
+            close={this.closeModal}
+          />
+          <Name className="itemName">{name}</Name>
+          <Description className="itemDescription">{description}</Description>
+          <Price className="itemPrice">
+            $
+            {price}
+          </Price>
+        </Body>
+      </Container>
 
     );
   }

@@ -16,7 +16,7 @@ const MenuItem = mongoose.model('MenuItem', MenuItemSchema);
 /* Query */
 const getMenu = params => MenuItem.find(params)
   .then(data => (JSON.stringify(data)))
-  .catch(err => console.log(`Query Error:${  err}`));
+  .catch((err) => { throw err; });
 
 module.exports.MenuItem = MenuItem;
 module.exports.getMenu = getMenu;

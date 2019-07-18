@@ -1,6 +1,7 @@
+/* eslint-disable import/extensions */
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './components/App.jsx';
+import MenuItems from './components/MenuItems.jsx';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<MenuItems />, document.getElementById('menuitems'));
