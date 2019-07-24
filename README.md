@@ -14,6 +14,7 @@
 1. [Usage](#Usage)
 1. [Requirements](#requirements)
 1. [Development](#development)
+2. [CRUD API](#development)
 
 ## Usage
 
@@ -27,6 +28,10 @@ An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
 - etc
 
 ## Development
+
+## CRUD API
+
+
 
 ### Installing Dependencies
 
