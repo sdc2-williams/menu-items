@@ -42,6 +42,13 @@ app.get('/api/menu/:menu', function (req, res) {
   }
 });
 
+app.get('/api/menu/:name', function (req, res) {
+  const name = req.params.name;
+     MenuItem.getMenuByName({ name })
+    .then(data => res.status(202).send(data))
+    .catch(err => console.log(`API Error:${err}`));
+ });
+
 app.put('/api/menu/:menu', function (req, res) {
   const menu = parseInt(req.params.menu);
   if (menu > 100) {

@@ -18,6 +18,10 @@ const getMenu = params => MenuItem.find(params)
   .then(data => (JSON.stringify(data)))
   .catch((err) => { throw err; });
 
+  const getMenuByName = params => MenuItem.find(params)
+  .then(data => (JSON.stringify(data)))
+  .catch((err) => { throw err; });
+
   const getAllMenus = params => MenuItem.find()
   .then(data => (JSON.stringify(data)))
   .catch((err) => { throw err; });
@@ -45,6 +49,7 @@ const getMenu = params => MenuItem.find(params)
 
 module.exports.MenuItem = MenuItem;
 module.exports.getMenu = getMenu;
+module.exports.getMenuByName = getMenuByName;
 module.exports.getAllMenus = getAllMenus;
 module.exports.deleteMenu = deleteMenu;
 module.exports.createMenu = createMenu;
