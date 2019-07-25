@@ -15,6 +15,7 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
 2. [CRUD API](#development)
+3. [Installing Dependencies](#development)
 
 ## Usage
 
@@ -57,7 +58,7 @@ Deletes menu item records from all the menus that contain specified menu number.
 
 
 
-### Installing Dependencies
+## Installing Dependencies
 
 From within the root directory:
 
