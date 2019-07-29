@@ -5,17 +5,16 @@ const loremIpsum = require("lorem-ipsum").loremIpsum;
 const mysql = require('mysql');
 //const csv = require('fast-csv');
 var csv = require('csv-parser')
+require('dotenv').config();
 
+//console.log(process.env)
 
-const mysqlConfig = {
-  host: 'localhost',
-  user: 'glkapitan',
-  password: 'student',
-  database: 'MenuItemSchema',
-  acquireTimeout: 1000000
-};
-
-const connection = mysql.createConnection(mysqlConfig);
+const connection = mysql.createConnection({
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASS,
+  database : process.env.DB_NAME
+});
 
 const generateWords = (num) => {
   return  loremIpsum({
@@ -118,6 +117,6 @@ const loadCSVIntoDatabase = (n) => {
 
 
 for (var i = 1; i <= 100; i++) {
-  createCSV(i);
+ // createCSV(i);
   loadCSVIntoDatabase(i);
 };
