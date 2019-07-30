@@ -4,3 +4,4 @@ client/dist/bundle.js
 client/dist/main.menuitems.js
 client/dist/menuitems.js
 client/dist/vendor.menuitems.js
+.env

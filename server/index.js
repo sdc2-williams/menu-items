@@ -18,14 +18,59 @@ app.use('/:menu', express.static(path.join(__dirname, '../client/dist')));
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: false }));
 
+
+app.get('/api/menu', function (req, res) {
+     MenuItem.getAllMenus()
+     .then(data => res.status(202).send(data))
+     .catch(err => console.log(`API Error:${err}`));
+ });
+
+app.post('/api/menu/', function (req, res) {
+    MenuItem.createMenu(req.body)
+     .then(data => res.status(202).send(data))
+     .catch(err => console.log(`API Error:${err}`));
+   });
+
 app.get('/api/menu/:menu', function (req, res) {
   const menu = parseInt(req.params.menu);
   if (menu > 100) {
     res.status(404).send();
   } else {
-    MenuItem.getMenu({ menu }).then(data => res.status(202).send(data)).catch(err => console.log(`API Error:${err}`));
+    MenuItem.getMenu({ menu })
+    .then(data => res.status(202).send(data))
+    .catch(err => console.log(`API Error:${err}`));
   }
 });
+
+app.get('/api/menu/:name', function (req, res) {
+  const name = req.params.name;
+     MenuItem.getMenuByName({ name })
+    .then(data => res.status(202).send(data))
+    .catch(err => console.log(`API Error:${err}`));
+ });
+
+app.put('/api/menu/:menu', function (req, res) {
+  const menu = parseInt(req.params.menu);
+  if (menu > 100) {
+    res.status(404).send();
+  } else {
+    MenuItem.updateMenu(req.body)
+    .then(data => res.status(202).send(data))
+    .catch(err => console.log(`API Error:${err}`));
+  }
+});
+
+app.delete('/api/menu/:menu', function (req, res) {
+  const menu = parseInt(req.params.menu);
+  if (menu > 100) {
+    res.status(404).send();
+  } else {
+    MenuItem.deleteMenu({ menu })
+    .then(data => res.status(202).send(data))
+    .catch(err => console.log(`API Error:${err}`));
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
