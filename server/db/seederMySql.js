@@ -72,6 +72,7 @@ const createCSV = (n) => {
   var data = generateMenuItems(100000);
 
   const filename = path.join(__dirname, 'outputv_' + n.toString() + '.csv');
+
   const output = [];
 
 data.forEach((d) => {
@@ -94,7 +95,11 @@ fs.writeFileSync(filename, output.join(os.EOL))
 
 
 const loadCSVIntoDatabase = (n) => {
-  let query = 'LOAD DATA LOCAL INFILE ? INTO TABLE menuItem (ind, menu, name, description, price, category, version, options)';
+  let text = '"'
+  let query = 'LOAD DATA LOCAL INFILE ? INTO TABLE menuItem FIELDS TERMINATED BY ' + "','" + ' ENCLOSED BY ' +  `'${text}'` + ' LINES TERMINATED BY ' + "'\n'" + ' (ind, menu, name, description, price, category, version, options)';
+
+ // console.log(query)
+
 
   const filename = path.join(__dirname, 'outputv_' + n.toString() + '.csv');
 
