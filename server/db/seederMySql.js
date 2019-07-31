@@ -5,7 +5,7 @@ const loremIpsum = require("lorem-ipsum").loremIpsum;
 const mysql = require('mysql');
 //const csv = require('fast-csv');
 var csv = require('csv-parser')
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 //console.log(process.env)
 
