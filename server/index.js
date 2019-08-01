@@ -2,6 +2,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
 /* eslint-disable no-console */
+require('newrelic');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
