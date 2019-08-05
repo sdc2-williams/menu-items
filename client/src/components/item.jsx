@@ -86,7 +86,7 @@ class Item extends React.Component {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < menuItems.length; i++) {
       // eslint-disable-next-line no-underscore-dangle
-      if (e.target.parentNode.id === menuItems[i]._id) {
+      if (e.target.parentNode.id === menuItems[i].id) {
         this.setState({ modalData: menuItems[i] }, this.openModal);
       }
     }
@@ -96,13 +96,14 @@ class Item extends React.Component {
     const { modalData, showModal } = this.state;
     const { item } = this.props;
     const {
-      name, description, price, _id,
+      name, description, price, id,
     } = item;
+    console.log(item)
 
     return (
 
       <Container className="singleItem">
-        <Body id={_id} onClick={this.handleItemClick}>
+        <Body id={id} onClick={this.handleItemClick}>
           { showModal ? <div onClick={this.closeModal} className="back-drop" /> : null }
           <Modal
             data={modalData}

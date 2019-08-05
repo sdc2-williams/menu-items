@@ -5,7 +5,7 @@ const loremIpsum = require("lorem-ipsum").loremIpsum;
 const mysql = require('mysql');
 //const csv = require('fast-csv');
 var csv = require('csv-parser')
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 //console.log(process.env)
 
@@ -93,6 +93,19 @@ fs.writeFileSync(filename, output.join(os.EOL))
 
 };
 
+const dropIndexes = (indexName) => {
+  let query = `ALTER TABLE menuItem DROP INDEX ${indexName};`;
+  connection.query(query, (error, response) => {
+    if (error) {
+      console.log(error);
+      return false;
+    } else {
+      console.log('index dropped');
+      return true;
+    }
+});
+}
+
 
 const loadCSVIntoDatabase = (n) => {
   let text = '"'
@@ -109,19 +122,32 @@ const loadCSVIntoDatabase = (n) => {
          loadCSVIntoDatabase(n);
        } else {
          if (n === 100 ) {
-          connection.end(function(errCon) {
-            if (errCon) {
-              console.log(errCon)
+          let query = 'ALTER TABLE menuItem ADD INDEX ti_menu_number (menu);';
+            connection.query(query, filename, (error, response) => {
+            if (error) {
+              console.log(error);
+            } else {
+              connection.end(function(errCon) {
+                if (errCon) {
+                  console.log(errCon)
+                }
+              }) // connection.end
             }
-          }) // connection.end
-
-          } // end if for the last file
-         } //else
-   });
+          });
+        } // end if for the last file
+      } //else
+  });
 };
 
 
 for (var i = 1; i <= 100; i++) {
  // createCSV(i);
-  loadCSVIntoDatabase(i);
+ if (i === 1) {
+  if (dropIndexes('ti_menu_number')) {
+    loadCSVIntoDatabase(i);
+  } else {
+   console.log('Index was not dropped, can not continue with upload')
+ }
+} else
+loadCSVIntoDatabase(i);
 };
